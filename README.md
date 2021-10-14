@@ -1,5 +1,7 @@
 # Build Week Scaffolding for Node and PostgreSQL
 
+test
+
 ## Video Tutorial
 
 The following tutorial explains how to set up this project using PostgreSQL and Heroku.

@@ -18,8 +18,18 @@ server.use(express.json())
 server.use(helmet())
 server.use(cors())
 
+server.get('/', (req, res) => {
+  console.log('test')
+})
 server.get('/api/users', async (req, res) => {
-  res.json(await getAllUsers())
+  // res.json(await getAllUsers())
+  try {
+    const result = await db('users')
+    console.log(result)
+  }
+  catch (err) {
+    console.log("err")
+  }
 })
 
 server.post('/api/users', async (req, res) => {

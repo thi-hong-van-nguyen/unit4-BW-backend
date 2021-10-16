@@ -1,7 +1,7 @@
 const express = require('express')
 const helmet = require('helmet')
 const cors = require('cors')
-const db = require('./data/db-config')
+const db = require('../data/db-config')
 
 function getAllUsers() { return db('users') }
 

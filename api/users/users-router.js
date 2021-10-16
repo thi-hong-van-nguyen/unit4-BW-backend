@@ -12,8 +12,12 @@ router.get('/', (req, res, next) => {
         .catch(next)
 })
 
-router.post('/register', md.validatePayload, md.checkUsernameUnique, md.checkRoleId, (req, res, next) => {
-    let user = req.body
+router.post('/register', md.validatePayload, md.checkUsernameUnique, (req, res, next) => {
+    let user = {
+        username: req.body.username,
+        password: req.body.password,
+        role_id: req.body.role_id
+    }
 
     const rounds = parseInt(process.env.BCRYPT_ROUNDS) || 4
 

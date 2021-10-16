@@ -13,17 +13,23 @@ const userSchema = yup.object().shape({
         .strict(true)
         .trim()
         .required('pw is required'),
-    role_id: yup
-        .number()
+    role: yup
+        .string()
         .strict(true)
-        .typeError('role must be a number')
 })
 
 async function validatePayload(req, res, next) {
     try {
-        const validated = await userSchema.validate(req.body)
-        req.body = validated
-        next()
+        let validated = await userSchema.validate(req.body)
+        if (validated.role === 'makemesuperman') {
+            validated.role_id = 1
+            req.body = validated
+            next()
+        } else {
+            validated.role_id = 2
+            req.body = validated
+            next()
+        }
     } catch (err) {
         next({
             status: 400,
@@ -87,7 +93,6 @@ function getRole(user_id) {
 module.exports = {
     checkUsernameUnique,
     validatePayload,
-    checkRoleId,
     checkUsernameExist,
     getRole
 }

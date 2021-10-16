@@ -6,7 +6,7 @@ const users = [
   },
   {
     username: "bar",
-    password: "4567",
+    password: "1234",
     role_id: 2
   },
 ]
@@ -16,24 +16,29 @@ const roles = [
     role_name: 'instructor'
   },
   {
-    role_name: 'user'
+    role_name: 'client'
   },
 
 ]
 
 const classes = [
   {
-    class_name: "HIIT",
-    class_room: "5B",
+    class_type: "HIIT",
+    class_location: "5B",
     class_duration: 90,
-    class_time: "10/14/2021 5PM"
+    class_time: "5PM",
+    class_date: "10/14/2021",
+    intensity_level: 5,
   },
   {
-    class_name: "yoga",
-    class_room: "1A",
+    class_type: "yoga",
+    class_location: "san jose",
     class_duration: 60,
-    class_time: "10/14/2021 9AM"
+    class_time: "9AM",
+    class_date: "12/05/2021",
+    intensity_level: 3,
   },
+
 ]
 
 exports.seed = async function (knex) {

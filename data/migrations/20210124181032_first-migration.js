@@ -13,10 +13,12 @@ exports.up = async (knex) => {
     })
     .createTable('classes', (classes) => {
       classes.increments('class_id')
-      classes.string('class_name').notNullable().unique()
-      classes.string('class_room').notNullable()
+      classes.string('class_type').notNullable().unique()
+      classes.string('class_location').notNullable()
       classes.string('class_time').notNullable()
+      classes.string('class_date').notNullable()
       classes.string('class_duration').notNullable()
+      classes.string('intensity_level')
     })
     .createTable('user_class', tbl => {
       tbl.increments('user_class_id')

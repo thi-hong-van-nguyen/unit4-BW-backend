@@ -25,7 +25,7 @@ server.get('/api/users', async (req, res) => {
   // res.json(await getAllUsers())
   try {
     const result = await db('users')
-    console.log(result)
+    res.status(200).json(result)
   }
   catch (err) {
     console.log("err")

@@ -1,6 +1,6 @@
 const yup = require('yup')
 const db = require('../../data/db-config')
-const md = require('./users-model')
+const User = require('./users-model')
 
 const userSchema = yup.object().shape({
     username: yup
@@ -40,7 +40,7 @@ async function validatePayload(req, res, next) {
 
 async function checkUsernameUnique(req, res, next) {
     const { username } = req.body
-    const exist = await md.findBy({ username }).first()
+    const exist = await User.findBy({ username }).first()
     if (exist) {
         next({
             status: 400,
@@ -57,7 +57,7 @@ async function checkRoleId(req, res, next) {
         req.body.role_id = 2
         next()
     } else {
-        if (await md.findBy({ role_id }).first()) {
+        if (await User.findBy({ role_id }).first()) {
             next()
         } else {
             next({
@@ -70,7 +70,7 @@ async function checkRoleId(req, res, next) {
 
 async function checkUsernameExist(req, res, next) {
     const { username } = req.body
-    const exist = await md.findBy({ username }).first()
+    const exist = await User.findBy({ username }).first()
     if (!exist) {
         next({
             status: 400,
@@ -89,10 +89,27 @@ function getRole(user_id) {
         .first()
 }
 
+async function checkIfBooked(req, res, next) {
+    try {
+        const { username } = req.params
+        const { class_id } = req.body
+        const userBookings = await User.findBookings(username)
+        const booked = userBookings.bookings.filter(b => b.class_id === class_id)
+        if (booked.length === 0) {
+            next()
+        } else (next({
+            status: 400,
+            message: 'You already booked this class'
+        }))
+    } catch (err) { next }
+
+}
+
 
 module.exports = {
     checkUsernameUnique,
     validatePayload,
     checkUsernameExist,
-    getRole
+    getRole,
+    checkIfBooked
 }

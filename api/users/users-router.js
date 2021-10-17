@@ -57,5 +57,23 @@ router.post('/login', md.validatePayload, md.checkUsernameExist, async (req, res
     } catch (err) { next(err) }
 })
 
+router.get(`/:username/bookings`, (req, res, next) => {
+    const { username } = req.params
+    User.findBookings(username)
+        .then(bookings => {
+            res.status(200).json(bookings)
+        })
+        .catch(next)
+})
+
+router.post('/:username/bookings', md.checkIfBooked, (req, res, next) => {
+    const { username } = req.params
+    const { class_id } = req.body
+    User.book(username, class_id)
+        .then(userBooking => {
+            res.status(201).json(userBooking)
+        })
+        .catch(next)
+})
 
 module.exports = router

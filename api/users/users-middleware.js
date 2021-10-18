@@ -51,22 +51,6 @@ async function checkUsernameUnique(req, res, next) {
     }
 }
 
-async function checkRoleId(req, res, next) {
-    let { role_id } = req.body
-    if (!role_id) {
-        req.body.role_id = 2
-        next()
-    } else {
-        if (await User.findBy({ role_id }).first()) {
-            next()
-        } else {
-            next({
-                status: 400,
-                message: 'role_id not exists'
-            })
-        }
-    }
-}
 
 async function checkUsernameExist(req, res, next) {
     const { username } = req.body
@@ -105,11 +89,30 @@ async function checkIfBooked(req, res, next) {
 
 }
 
+async function checkBookingId(req, res, next) {
+    const { username, booking_id } = req.params
+    const user = await User.findBy({ username }).first()
+    const exist = await db('user_class as uc')
+        .leftJoin('users as u', 'uc.user_id', 'u.user_id')
+        .select('uc.*', 'u.*')
+        .where({ 'uc.user_id': user.user_id, 'uc.user_class_id': booking_id })
+        .first()
+    if (!exist) {
+        next({
+            status: 404,
+            message: 'cannot find this booking id in this client\'s booking lists'
+        })
+    } else {
+        next()
+    }
+}
+
 
 module.exports = {
     checkUsernameUnique,
     validatePayload,
     checkUsernameExist,
     getRole,
-    checkIfBooked
+    checkIfBooked,
+    checkBookingId
 }

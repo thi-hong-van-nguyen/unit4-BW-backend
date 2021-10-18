@@ -1,5 +1,5 @@
 const yup = require('yup')
-
+const Class = require('./classes-model')
 
 const classSchema = yup.object().shape({
     class_type: yup
@@ -44,9 +44,20 @@ async function checkClassPayload(req, res, next) {
     }
 }
 
-
+async function checkClassExist(req, res, next) {
+    const { class_id } = req.params
+    const exist = await Class.findById(class_id)
+    if (!exist) {
+        next({
+            status: 404,
+            message: `cannot find class with id ${class_id}`
+        })
+    } else {
+        next()
+    }
+}
 
 module.exports = {
     checkClassPayload,
-
+    checkClassExist
 }

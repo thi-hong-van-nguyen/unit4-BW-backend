@@ -76,4 +76,18 @@ router.post('/:username/bookings', md.checkIfBooked, (req, res, next) => {
         .catch(next)
 })
 
+
+router.delete('/:username/bookings/:booking_id', md.checkBookingId, (req, res, next) => {
+    const { username, booking_id } = req.params
+    User.cancelBooking(username, booking_id)
+        .then(currentBookings => {
+            res.status(200).json({
+                message: `booking id ${booking_id} has been canceled!`,
+                currentBookings
+            })
+        })
+        .catch(next)
+})
+
+
 module.exports = router

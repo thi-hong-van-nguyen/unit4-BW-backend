@@ -18,7 +18,7 @@ const findBookings = async (username) => {
 
     const userBookings = await db('users as u')
         .leftJoin('user_class as uc', 'uc.user_id', 'u.user_id')
-        .select('u.user_id', 'u.username', 'uc.class_id')
+        .select('u.user_id', 'u.username', 'uc.user_class_id', 'uc.class_id')
         .where('u.user_id', user_id)
         .leftJoin('classes as c', 'c.class_id', 'uc.class_id')
         .select('c.class_id', 'c.class_type', 'c.class_location', 'c.class_date', 'c.class_time', 'c.class_duration', 'c.intensity_level')
@@ -28,6 +28,7 @@ const findBookings = async (username) => {
         username: userBookings[0].username,
         bookings: userBookings.map(b => {
             return ({
+                booking_id: b.user_class_id,
                 class_id: b.class_id,
                 class_type: b.class_type,
                 class_location: b.class_location,
@@ -67,6 +68,16 @@ async function book(username, class_id) {
     })
 }
 
+async function cancelBooking(username, booking_id) {
+    await db('user_class as uc')
+        .where('uc.user_class_id', booking_id)
+        .del()
+    let result = await findBookings(username)
+    const currentBookings = result.bookings
+    if (currentBookings[0].booking_id === null) return []
+    return currentBookings
+}
+
 module.exports = {
-    findAll, add, findBy, findBookings, book
+    findAll, add, findBy, findBookings, book, cancelBooking
 }

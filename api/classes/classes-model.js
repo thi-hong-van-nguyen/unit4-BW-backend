@@ -1,5 +1,4 @@
 const db = require('../../data/db-config')
-const User = require('../users/users-model')
 
 async function findAll() {
     const classes = await db('classes as c')
@@ -50,14 +49,31 @@ async function add(newClass) {
     return db('classes').where({ class_id }).first()
 }
 
+function findById(class_id) {
+    return db('classes')
+        .where({ class_id })
+        .first()
+}
 
+async function remove(class_id) {
+    const deletedClass = await findById(class_id)
+    await db('classes')
+        .where({ class_id })
+        .del()
+    return deletedClass
+}
 
-function remove(class_id) {
-
+async function update(class_id, classToUpdate) {
+    await db('classes')
+        .where({ class_id })
+        .update(classToUpdate)
+    return findById(class_id)
 }
 
 module.exports = {
     findAll,
     add,
-    remove
+    remove,
+    update,
+    findById
 }

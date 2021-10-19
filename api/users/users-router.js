@@ -51,7 +51,7 @@ router.post('/login', md.validatePayload, md.checkUsernameExist, async (req, res
         } else {
             next({
                 status: 401,
-                message: 'invalid pw'
+                message: 'invalid password'
             })
         }
     } catch (err) { next(err) }

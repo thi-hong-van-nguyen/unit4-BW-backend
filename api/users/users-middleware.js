@@ -12,7 +12,7 @@ const userSchema = yup.object().shape({
         .string()
         .strict(true)
         .trim()
-        .required('pw is required'),
+        .required('password is required'),
     role: yup
         .string()
         .strict(true)

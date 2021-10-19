@@ -44,6 +44,7 @@ router.post('/login', md.validatePayload, md.checkUsernameExist, async (req, res
 
             res.status(200).json({
                 message: `welcome back, ${existingUser.username}`,
+                username: existingUser.username,
                 token,
                 role_name: role.role_name
             })

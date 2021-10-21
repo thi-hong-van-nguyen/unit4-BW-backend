@@ -2,6 +2,8 @@ const db = require('../../data/db-config')
 
 const findAll = () => {
     return db('users')
+        .leftJoin('roles', 'users.role_id', 'roles.role_id')
+        .select('users.*', 'roles.role_name')
 }
 
 const add = async (user) => {
